@@ -60,10 +60,10 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 ![Diary AI](images/1b.png)
 
 
-![Diary AI](images/2.png)
-
-
 ![Diary AI](images/2a.png)
+
+
+![Diary AI](images/2.png)
 
 
 ![Diary AI](images/2b.png)
