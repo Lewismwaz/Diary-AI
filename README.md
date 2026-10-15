@@ -1,6 +1,5 @@
-<h1 align="center">Diary AI</h1>
 <p align="center">
-  <img src="images/logo.png" width="80" alt="Diary-AI Logo">
+  <h2>Diary AI</h2><img src="images/logo.png" width="80" alt="Diary-AI Logo">
 </p>
 
 **A private, AI-assisted diary for capturing personal reflections, understanding patterns, and preserving entries through backup and restore.**
