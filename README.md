@@ -381,7 +381,9 @@ RECOVERY_OTP_SECRET=""
 > The values in `.env` directly above are dummy values, not actual working credentials.
 
 ### 7. Install Diary-AI-Setup-0.1.0-x64.exe
-- Run the package installer `Diary-AI-Setup-0.1.0-x64` from the root directory of the cloned folder `Diary-AI`
+- Download the official release zip file [here](https://github.com/Lewismwaz/Diary-AI/releases/download/%23Diary-AI-v0.0.1/Diary-AI-Setup-v0.1.0-x64.zip).
+- `Extract here` the downloaded file `Diary-AI-Setup-v0.1.0-x64.zip` and open the extracted folder `Diary-AI-Setup-v0.1.0-x64`.
+- Run the package installer `Diary-AI-Setup-0.1.0-x64` from the root directory of the extracted folder.
 - Click `Next` then `Install` and keep the `Destination Folder` as is.
 ![Diary AI Install](images/installation.png)
 
