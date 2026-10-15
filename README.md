@@ -1,6 +1,4 @@
-<p align="center">
-  	<h2>Diary AI</h2>
-</p>
+<h2 align="center">Diary AI</h2>
 <p align="center">
 	<img src="images/logo.png" width="80" alt="Diary-AI Logo">
 </p>
