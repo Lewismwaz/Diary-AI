@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String          @id @default(uuid()) @db.Uuid
+  email        String          @unique @db.VarChar(320)
+  firstName    String          @db.VarChar(60)
+  lastName     String          @db.VarChar(60)
+  passwordHash String          @db.VarChar(255)
+
+  sessionVersion Int @default(0)
+
+  entries      DiaryEntry[]
+  trendReports AITrendReport[]
+  privacySettings PrivacySettings?
+
+  recoverySessions AccountRecoverySession[]
+
+  googleBackupConnection GoogleBackupConnection?
+
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([email])
+}
+
+model PrivacySettings {
+  id                      String   @id @default(uuid()) @db.Uuid
+  userId                  String   @unique @db.Uuid
+  allowVoiceTranscription Boolean  @default(true)
+  allowAIProcessing       Boolean  @default(true)
+  allowAITrendAnalysis    Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DiaryEntry {
+  id                 String      @id @default(uuid()) @db.Uuid
+  userId             String      @db.Uuid
+  title              String      @db.VarChar(160)
+  originalTranscript String?     @db.Text
+  cleanedContent     String      @db.Text
+  entryDate           DateTime    @default(now())
+  source              EntrySource @default(TEXT)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aiAnalysis AIAnalysis?
+
+  @@index([userId, entryDate(sort: Desc)])
+}
+
+model AIAnalysis {
+  id              String     @id @default(uuid()) @db.Uuid
+  diaryEntryId    String     @unique @db.Uuid
+  summary         String     @db.Text
+  moodLabel       String?    @db.VarChar(80)
+  moodConfidence  Float?
+  topics          String[]
+  importantEvents String[]
+  actionItems     String[]
+  recommendations Json?
+  model           String?    @db.VarChar(120)
+  promptVersion   String?    @db.VarChar(40)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  diaryEntry DiaryEntry @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
+}
+
+enum EntrySource {
+  TEXT
+  VOICE
+}
+
+model AITrendReport {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  period      String   @db.VarChar(10)
+  fingerprint String   @db.VarChar(64)
+  synthesis   Json
+  generatedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, period])
+  @@index([userId])
+}
+
+model GoogleBackupConnection {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @unique @db.Uuid
+
+  googleAccountId  String   @unique @db.VarChar(255)
+  googleEmail      String   @db.VarChar(320)
+
+  encryptedRefreshToken String @db.Text
+
+  backupGeneration Int      @default(1)
+  lastBackupAt     DateTime?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  backupFiles GoogleBackupFile[]
+
+  @@index([googleAccountId])
+}
+
+model GoogleBackupFile {
+  id           String   @id @default(uuid()) @db.Uuid
+  connectionId String   @db.Uuid
+
+  googleFileId String   @unique @db.VarChar(255)
+  generation   Int
+  filename     String   @db.VarChar(255)
+  sizeBytes    Int?
+  createdAt    DateTime @default(now())
+
+  connection GoogleBackupConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@index([connectionId, generation])
+}
+
+model AccountRecoverySession {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String    @db.Uuid
+  tokenHash        String    @unique @db.VarChar(64)
+
+  googleVerifiedAt DateTime  @default(now())
+  backupVerifiedAt DateTime?
+  emailVerifiedAt  DateTime?
+
+  otpHash          String?   @db.VarChar(64)
+  otpExpiresAt     DateTime?
+  otpAttempts      Int       @default(0)
+  otpSentCount     Int       @default(0)
+  otpLastSentAt    DateTime?
+
+  expiresAt        DateTime
+  createdAt        DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+
+model PortableRestoreSession {
+  id        String @id @default(uuid()) @db.Uuid
+  tokenHash String @unique @db.VarChar(64)
+
+  // Google identity verified during restoration
+  googleAccountId  String?   @db.VarChar(255)
+  googleEmail      String?   @db.VarChar(320)
+  googleVerifiedAt DateTime?
+
+  // AES-256-GCM encrypted temporary Google access token
+  encryptedGoogleAccessToken String? @db.Text
+
+  accountPasswordAttempts Int @default(0)
+
+  // Selected Google Drive backup
+  googleFileId       String?   @db.VarChar(255)
+  backupDigest       String?   @db.VarChar(64)
+  backupVerifiedAt   DateTime?
+  backupVerifyAttempts Int     @default(0)
+
+  // Email identity verified through OTP
+  recoveryEmail   String?   @db.VarChar(320)
+  emailVerifiedAt DateTime?
+
+  otpHash         String?   @db.VarChar(64)
+  otpExpiresAt    DateTime?
+  otpAttempts     Int       @default(0)
+  otpSentCount    Int       @default(0)
+  otpLastSentAt   DateTime?
+
+  // Restoration must be completed only once
+  completedAt DateTime?
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+  @@index([googleAccountId])
+}
