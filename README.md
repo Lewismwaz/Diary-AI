@@ -1,5 +1,5 @@
 # Diary AI 
-<img src="images/logo.png" width="60">
+<img src="images/logo.png" width="80">
 
 **A private, AI-assisted diary for capturing personal reflections, understanding patterns, and preserving entries through backup and restore.**
 
