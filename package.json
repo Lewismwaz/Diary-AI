@@ -1,0 +1,67 @@
+{
+  "name": "diary-ai-foundation",
+  "version": "0.1.0",
+  "productName": "Diary AI",
+  "description": "Diary AI — a private diary with AI-powered insights, voice features, and secure backups.",
+  "author": "Yavotu",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "main": "dist/electron/main.js",
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "desktop:compile": "tsc -p tsconfig.electron.json",
+    "desktop:prepare": "npm run db:generate && npm run build && node scripts/prepare-desktop.mjs",
+    "desktop:dist": "npm run desktop:prepare && npm run desktop:compile && electron-builder --config electron-builder.yml --win nsis --x64"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "bcryptjs": "^3.0.3",
+    "embedded-postgres": "18.4.0-beta.17",
+    "googleapis": "^183.0.0",
+    "next": "16.3.3",
+    "next-auth": "^5.0.0-beta.32",
+    "nodemailer": "^8.0.11",
+    "prisma": "7.10.0",
+    "pg": "^8.16.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.6.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^24.0.0",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "electron": "^44.7.0",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.3.3",
+    "postcss": "^8.5.0",
+    "tailwindcss": "^4.3.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.1",
+    "mysql2": "^3.23.1",
+    "sharp": "^0.35.3"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "prisma": true,
+    "unrs-resolver": true,
+    "@prisma/engines": true,
+    "embedded-postgres": true
+  }
+}
