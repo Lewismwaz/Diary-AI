@@ -291,6 +291,7 @@ In the current `electron/main.ts`, the desktop HTTP port defaults to `3210`, whi
 │   └── prepare-desktop.mjs
 ├── public/
 │   └── tts/sherpa/
+│   └── images/favicons/
 ├── workers/
 ├── build/
 │   └── icon.ico
@@ -528,6 +529,19 @@ The project's CI workflow currently selects Node.js `24`. Prefer that major vers
 git clone https://github.com/Lewismwaz/Diary-AI.git
 cd Diary-AI
 ```
+
+### Extra Resources
+- Download the `Sherpa-onx TTS` zip file containing `Diary AI code` and `custom tts data` from [here](https://drive.google.com/drive/folders/1NJGM10quNGZMbN-_OsEET4JapTELpNdH?usp=drive_link)
+- Extract the zip file to `Diary-AI/public` so that now it now contains:
+  ```
+├── public/
+	└── tts/sherpa/
+			     └──sherpa-onnx-tts.js
+			     └──sherpa-onnx-tts.worker.js
+			     └──sherpa-onnx-wasm-main-tts.js
+			     └──sherpa-onnx-wasm-main-tts.data
+	└── images/
+  ```
 
 ### Install all npm dependencies
 Inside your `Diary-AI` directory, run:
