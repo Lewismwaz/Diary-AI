@@ -1,37 +1,20 @@
 # Diary AI 
 <img src="images/logo.png" width="60">
-
 **A private, AI-assisted diary for capturing personal reflections, understanding patterns, and preserving entries through backup and restore.**
 
 Diary AI is a full-stack TypeScript application built with Next.js, React, PostgreSQL, and Prisma. The current source includes diary entry management, voice transcription, AI-assisted entry cleanup and analysis, trend reports, text-to-speech narration, account security and recovery workflows, Google Drive backup/restore, and a Windows desktop application built with Electron and an embedded PostgreSQL runtime.
 
 ## Contents
 - [Features](#features)
-- [Technology stack](#technology-stack)
 - [Architecture](#architecture)
-- [Repository layout](#repository-layout)
-- [Requirements](#requirements)
-- [Get the source and install dependencies](#get-the-source-and-install-dependencies)
-- [Configure web development](#configure-web-development)
-- [Environment variables](#environment-variables)
-- [Generate application secrets](#generate-application-secrets)
-- [Install and configure PostgreSQL](#install-and-configure-postgresql)
-- [Prisma Client, migrations, and Studio](#prisma-client-migrations-and-studio)
-- [Configure Google OAuth and Drive](#configure-google-oauth-and-drive)
-- [Configure Cohere](#configure-cohere)
-- [Configure Gmail SMTP](#configure-gmail-smtp)
-- [Run and validate the web app](#run-and-validate-the-web-app)
-- [Build the Windows desktop installer](#build-the-windows-desktop-installer)
-- [GitHub Actions build workflow](#github-actions-build-workflow)
-- [Desktop configuration and data](#desktop-configuration-and-data)
-- [Security and privacy](#security-and-privacy)
-- [Troubleshooting](#troubleshooting)
+- [Prerequisites](#PREREQUISITES)
+- [Configure Diary AI](#configure-diary-ai)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 
 # Features
-### Diary and AI
+### (i). Diary and AI
 - Create, view, edit, and delete diary entries.
 - Store text entries and voice-origin entries, with an original transcript field and a cleaned entry field.
 - Record audio in the browser and submit it for transcription through the configured [Cohere tts](https://docs.cohere.com/reference/about) API integration.
@@ -41,12 +24,12 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 - Respect per-account privacy preferences for voice transcription, AI processing, and AI trend analysis.
 - Use responsive forms, loading states, status feedback, error boundaries, and reusable UI components.
 
-### Text-to-speech
+### (ii). Text-to-speech
 - Includes a [Sherpa-ONNX](https://k2-fsa.github.io/sherpa/onnx/tts/all/) WebAssembly-based TTS engine and related voice, segmentation, PCM playback, and WAV conversion utilities.
 - Provides listen/narration controls and a narration modal.
 - TTS runs through the local application assets rather than requiring every narration request to be sent to Cohere.
 
-### Accounts and recovery
+### (iii). Accounts and recovery
 - Account registration and credentials-based login using Auth.js / NextAuth and password hashing with `bcryptjs`.
 - Account profile editing and password changes.
 - JWT session validation with a database-backed `sessionVersion` check to support invalidating older sessions when the version changes.
@@ -54,7 +37,7 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 - OTP attempt and send-count fields, expiry timestamps, and recovery-session expiry data in the database schema.
 - Separate portable-account-restore sessions for restoring an account/diary onto another installation.
 
-### Backup and Google Drive
+### (iv). Backup and Google Drive
 - Backup export and encrypted-export routes.
 - Backup verification routes.
 - Google Drive connection and disconnection flows.
@@ -62,14 +45,6 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 - Restore account preview, backup selection, email verification, and portable restore flows.
 - Encryption helpers for Google tokens and backup payloads.
 
-### Windows desktop
-- Electron main process launches a local Next.js standalone production server.
-- Desktop startup initializes an embedded PostgreSQL data directory, creates the application database when needed, and applies committed Prisma migrations.
-- Desktop runtime configuration persists generated secrets and a PostgreSQL password in the app's user-data directory.
-- Electron Builder is configured to produce a 64-bit Windows NSIS installer.
-- Installer configuration creates desktop and Start Menu shortcuts and does not automatically delete app data on uninstall.
-
-The desktop build is designed to bundle its runtime dependencies. A normal end user should not need to separately install Node.js or PostgreSQL if the generated installer includes all configured runtime files and embedded PostgreSQL binaries.
 
 ## Technology stack
 
@@ -229,20 +204,11 @@ In the current `electron/main.ts`, the desktop HTTP port defaults to `3210`, whi
 
 Some directories contain additional files beyond those illustrated above. Generated Prisma client output is written to `generated/prisma/` and is excluded by the repository's `.gitignore`; it is regenerated during setup/build.
 
-## Requirements
-For web development on Windows 10/11:
-- Git for Windows.
-- Node.js 24 (the included GitHub Actions workflow uses Node.js 24).
-- npm, included with Node.js.
-- PostgreSQL supported by the Prisma configuration.
-- pgAdmin 4 (optional GUI).
-- Google Cloud OAuth credentials for Google Drive and Google recovery flows.
-- Cohere API key for the AI routes that use Cohere.
-- Gmail App Password or another supported SMTP configuration for email OTP.
-- VS Code or another code editor.
-
 ## PREREQUISITES
-## Configure Diary AI .exe
+- Download `repository zip`:
+![Download Repo](images/github-ziP.png)
+
+## Configure Diary-AI
 ### 1. Create `.env`
 - Diary AI application loads `.env` from its Electron user-data directory. The current `electron/main.ts` uses port `3210` by default, starts its own embedded PostgreSQL instance, and generates/persists these runtime secrets in `desktop-runtime.json` when that file does not already exist
 - For this Windows install, the desktop `.env` is typically located at:
@@ -258,7 +224,7 @@ For web development on Windows 10/11:
 > [!NOTE]
 > To locate the `.env` file, navigate to: C:\Users\<YourWindowsUsername>\AppData\Roaming\Diary AI\ .env
 
-- Copy the contents of the sample `.env` below:
+- Copy-paste the contents of the sample `.env` below to your `.env`:
 ```dotenv
 # The desktop main process generates DATABASE_URL dynamically.
 # Do not set the web-development DATABASE_URL here.
@@ -293,7 +259,7 @@ RECOVERY_OTP_SECRET=""
 > [!CAUTION]
 > Do not delete `desktop-runtime.json` casually: the existing PostgreSQL password and encryption/authentication secrets are tied to the user's local installation.
 
-## 2. Generate application secrets
+### 2. Generate application secrets
 Run these commands in PowerShell from the project directory. They generate values locally.
 > [!NOTE]
 > - This step may require you to install Node.js. 
@@ -313,15 +279,15 @@ node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"
 
 - This produces Base64 for 32 random bytes. Use it for `GOOGLE_TOKEN_ENCRYPTION_KEY` only if that code path expects Base64-encoded 32-byte material. 
 
-## 3. Configure Google OAuth and Drive
+### 3. Configure Google OAuth and Drive
 Google OAuth is used by the Drive connection, backup/restore, and account-recovery flows. The project defines three callback routes per environment. To configure it:
-### 1. Create a Google Cloud project
+#### 1. Create a Google Cloud project
 1. Open <https://console.cloud.google.com/>.
 2. Create or select a project dedicated to `Diary AI`.
 3. Open **APIs & Services → Library**.
 4. Enable **Google Drive API**.
 
-### 2. Configure OAuth consent
+#### 2. Configure OAuth consent
 In **Google Auth Platform** (or **APIs & Services → OAuth consent screen**, depending on the console UI):
 ![Configure Google Oauth|496](images/google-oauth.png)
 1. Set the app name `Diary AI` and support/developer contact email.
@@ -330,7 +296,7 @@ In **Google Auth Platform** (or **APIs & Services → OAuth consent screen**, de
 4. Review the requested OAuth scopes and request only the access needed by the app.
 5. Complete required branding or verification steps.
 
-### 3. Create OAuth credentials
+#### 3. Create OAuth credentials
 1. Open **Google Auth Platform → Clients** or **APIs & Services → Credentials**.
 2. Create an OAuth client ID of type **Web application** for the current localhost callback architecture.
 3. Add `http://localhost:3000` as an authorized JavaScript origin if the Google OAuth flow used by the app requires it.
@@ -343,7 +309,7 @@ http://localhost:3210/api/auth/recovery/google/callback
 
 6. Save and copy the client ID and secret into the `.env` file.
 
-### 4. Configure the environment
+#### 4. Configure the environment
 ```dotenv
 GOOGLE_CLIENT_ID="YOUR_CLIENT_ID.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="YOUR_CLIENT_SECRET"
@@ -352,7 +318,7 @@ GOOGLE_RECOVERY_REDIRECT_URI="http://localhost:3000/api/auth/recovery/google/cal
 GOOGLE_RESTORE_REDIRECT_URI="http://localhost:3000/api/restore/google/callback"
 ```
 
-## 5. Configure Cohere
+### 5. Configure Cohere
 1. Create/sign in to a Cohere account at <https://dashboard.cohere.com/>.
 2. Open the API key section and create/copy a key for Diary AI.
 3. Add it to the `.env` file:
@@ -363,7 +329,7 @@ COHERE_API_KEY="YOUR_COHERE_API_KEY"
 > [!NOTE]
 >  Cohere features require internet connectivity and are subject to the provider's model availability, rate limits, account settings, and pricing. Choose the free trial API Key.
 
-## 6. Configure Gmail SMTP
+### 6. Configure Gmail SMTP
 - The project uses Nodemailer and SMTP settings for recovery email delivery. 
 - A Gmail App Password is different from the normal Google account password.
 1. Sign in to the Google account (`your-dedicated-account`) that will send recovery messages.
@@ -407,7 +373,7 @@ SMTP_APP_PASSWORD="qwer tyui opas dfgh"
 SMTP_FROM_NAME="Diary AI"
 
 RECOVERY_OTP_SECRET=""
-  ```
+```
 
 ## GitHub Actions build workflow
 The repository includes `.github/workflows/build-windows.yml`. The workflow:
@@ -427,7 +393,7 @@ git push origin v0.1.0
 > [!WARNING]
 > The values in `.env` directly above are dummy values, not actual working credentials.
 
-## 7. Install Diary-AI-Setup-0.1.0-x64.exe
+### 7. Install Diary-AI-Setup-0.1.0-x64.exe
 - Run the package installer `Diary-AI-Setup-0.1.0-x64` from the root directory of the cloned folder `Diary-AI`
 - Click `Next` then `Install` and keep the `Destination Folder` as is.
 ![Diary AI Install](images/installation.png)
@@ -442,7 +408,6 @@ git push origin v0.1.0
 
 ## Roadmap
 These features are planned and are **not represented as completed** by this README.
-
 ### 1. Automatic idle lock
 - Lock the diary after a configurable period of inactivity.
 - Require reauthentication before private content is revealed again.
@@ -479,13 +444,13 @@ These features are planned and are **not represented as completed** by this READ
 - Accessibility and performance testing.
 - Clear documentation for AI data processing, backup recovery, local data ownership, and account deletion.
 
-## Contributing
-1. Create a feature branch.
-2. Run `npm ci`.
-3. Follow the existing separation between UI, domain schemas, services, repositories, and persistence.
-4. Add or update validation, migrations, and tests as appropriate.
-5. Run `npm run lint` and the relevant build/tests.
-6. Do not include `.env`, API keys, OAuth secrets, SMTP passwords, personal diary content, database dumps, generated runtime secrets, or `node_modules` in commits or pull requests.
-
 ## License
-The current `package.json` declares `"license": "UNLICENSED"` and `"private": true`. This repository is not currently presented as an open-source package for redistribution. Add or change the license only when you are ready to grant the corresponding rights.
+This project is licensed under the GNU License. View License [here.]([https://github.com/Lewismwaz/appoint_master/blob/main/MIT%20LICENSE.txt](https://github.com/Lewismwaz/Diary-AI/blob/main/LICENSE))  
+More details about the MIT License can be found [here.](https://choosealicense.com/licenses/mit/)
+
+## Contact
+For any inquiries, please contact:
+- Email - eappointmaster@gmail.com
+- GitHub - [@Lewismwaz](https://github.com/Lewismwaz)  
+
+[Diary AI](https://github.com/Lewismwaz/Diary-AI)**©** 2026, All Rights Reserved
