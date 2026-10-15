@@ -532,16 +532,18 @@ git clone https://github.com/Lewismwaz/Diary-AI.git
 cd Diary-AI
 ```
 
+- If `git` isn't installed, download zip of this repository [here](https://github.com/Lewismwaz/Diary-AI/archive/refs/heads/main.zip)
+
 ### Extra Resources
 - Download the `Sherpa-onx TTS` zip file containing `Diary AI code` and `custom tts data` from [here](https://drive.google.com/drive/folders/1NJGM10quNGZMbN-_OsEET4JapTELpNdH?usp=drive_link)
 - Extract the zip file to `Diary-AI/public` so that now it now contains:
 ```
 ├── public/
 	└── tts/sherpa/
-			     └──sherpa-onnx-tts.js
-			     └──sherpa-onnx-tts.worker.js
-			     └──sherpa-onnx-wasm-main-tts.js
-			     └──sherpa-onnx-wasm-main-tts.data
+		└──sherpa-onnx-tts.js
+		└──sherpa-onnx-tts.worker.js
+		└──sherpa-onnx-wasm-main-tts.js
+		└──sherpa-onnx-wasm-main-tts.data
 	└── images/
 ```
 
