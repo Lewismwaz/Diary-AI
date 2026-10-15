@@ -971,7 +971,7 @@ More details about the MIT License can be found [here.](https://choosealicense.c
 
 ## Contact
 For any inquiries, please contact:
-- Email - eappointmaster@gmail.com
-- GitHub - [@Lewismwaz](https://github.com/Lewismwaz)  
+- Email - <eappointmaster@gmail.com> or <yavotu@gmail.com>
+- GitHub - [@Lewismwaz](https://github.com/Lewismwaz)  or [@Yavotu](https://github.com/Yavotu)
 
 [Diary AI](https://github.com/Lewismwaz/Diary-AI) **©** 2026, All Rights Reserved
