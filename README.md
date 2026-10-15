@@ -376,20 +376,6 @@ SMTP_FROM_NAME="Diary AI"
 RECOVERY_OTP_SECRET=""
 ```
 
-## GitHub Actions build workflow
-The repository includes `.github/workflows/build-windows.yml`. The workflow:
-- Runs on a Windows runner.
-- Sets up Node.js 24 with npm caching.
-- Installs dependencies.
-- Runs `npm run desktop:dist`.
-- Uploads the resulting `release/*.exe` as a build artifact for 14 days.
-- Publishes the installer as a GitHub Release when the workflow runs for a version tag matching `v*`.
-
-To publish a versioned release, create and push a version tag according to your release process, for example:
-```powershell
-git tag v0.1.0
-git push origin v0.1.0
-```
 
 > [!WARNING]
 > The values in `.env` directly above are dummy values, not actual working credentials.
