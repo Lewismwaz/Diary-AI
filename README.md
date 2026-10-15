@@ -535,7 +535,7 @@ cd Diary-AI
 ### Extra Resources
 - Download the `Sherpa-onx TTS` zip file containing `Diary AI code` and `custom tts data` from [here](https://drive.google.com/drive/folders/1NJGM10quNGZMbN-_OsEET4JapTELpNdH?usp=drive_link)
 - Extract the zip file to `Diary-AI/public` so that now it now contains:
-  ```
+```
 ├── public/
 	└── tts/sherpa/
 			     └──sherpa-onnx-tts.js
@@ -543,7 +543,7 @@ cd Diary-AI
 			     └──sherpa-onnx-wasm-main-tts.js
 			     └──sherpa-onnx-wasm-main-tts.data
 	└── images/
-  ```
+```
 
 ### Install all npm dependencies
 Inside your `Diary-AI` directory, run:
