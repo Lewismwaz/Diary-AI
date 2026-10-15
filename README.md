@@ -1,5 +1,6 @@
 # Diary AI 
-![Diary AI logo|20](images/logo.png)
+<img src="images/logo.png" width="20">
+
 **A private, AI-assisted diary for capturing personal reflections, understanding patterns, and preserving entries through backup and restore.**
 
 Diary AI is a full-stack TypeScript application built with Next.js, React, PostgreSQL, and Prisma. The current source includes diary entry management, voice transcription, AI-assisted entry cleanup and analysis, trend reports, text-to-speech narration, account security and recovery workflows, Google Drive backup/restore, and a Windows desktop application built with Electron and an embedded PostgreSQL runtime.
