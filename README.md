@@ -1,5 +1,6 @@
 # Diary AI 
 <img src="images/logo.png" width="60">
+
 **A private, AI-assisted diary for capturing personal reflections, understanding patterns, and preserving entries through backup and restore.**
 
 Diary AI is a full-stack TypeScript application built with Next.js, React, PostgreSQL, and Prisma. The current source includes diary entry management, voice transcription, AI-assisted entry cleanup and analysis, trend reports, text-to-speech narration, account security and recovery workflows, Google Drive backup/restore, and a Windows desktop application built with Electron and an embedded PostgreSQL runtime.
@@ -445,7 +446,7 @@ These features are planned and are **not represented as completed** by this READ
 - Clear documentation for AI data processing, backup recovery, local data ownership, and account deletion.
 
 ## License
-This project is licensed under the GNU License. View License [here.]([https://github.com/Lewismwaz/appoint_master/blob/main/MIT%20LICENSE.txt](https://github.com/Lewismwaz/Diary-AI/blob/main/LICENSE))  
+This project is licensed under the GNU License. View License [here](https://github.com/Lewismwaz/Diary-AI/blob/main/LICENSE).  
 More details about the MIT License can be found [here.](https://choosealicense.com/licenses/mit/)
 
 ## Contact
@@ -453,4 +454,4 @@ For any inquiries, please contact:
 - Email - eappointmaster@gmail.com
 - GitHub - [@Lewismwaz](https://github.com/Lewismwaz)  
 
-[Diary AI](https://github.com/Lewismwaz/Diary-AI)**©** 2026, All Rights Reserved
+[Diary AI](https://github.com/Lewismwaz/Diary-AI) **©** 2026, All Rights Reserved
