@@ -12,7 +12,7 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 - [System Demo](#system-demo)
 - [Architecture](#architecture)
 - [Prerequisites](#PREREQUISITES)
-- [Configure Diary AI](#configure-diary-ai)
+- [Install Diary AI](#install-diary-ai)
 - [Roadmap](#roadmap)
 - [Source Code Setup](#local-development-setup)
 - [Configure Web Development](#configure-web-development)
@@ -22,17 +22,17 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 # Features
 ### (i). Diary and AI
 - Create, view, edit, and delete diary entries.
-- Store text entries and voice-origin entries, with an original transcript field and a cleaned entry field.
-- Record audio in the browser and submit it for transcription through the configured [Cohere tts](https://docs.cohere.com/reference/about) API integration.
-- Request AI-assisted cleanup of diary content.
-- Generate structured entry analysis, including summaries, mood labels and confidence, topics, important events, action items, and recommendations when returned by the configured model.
-- Generate and display trend reports across diary entries.
-- Respect per-account privacy preferences for voice transcription, AI processing, and AI trend analysis.
+- Store `text` entries and `voice`-origin entries, with an original transcript field and a cleaned entry field.
+- Record audio in the browser and submit it for `transcription` through the configured [Cohere tts](https://docs.cohere.com/reference/about) API integration.
+- Request `AI-assisted cleanup` of diary content.
+- Generate structured `entry analysis`, including summaries, mood labels and confidence, topics, important events, action items, and recommendations when returned by the configured model.
+- Generate and display `trend reports` across diary entries.
+- Respect per-account `privacy preferences` for voice transcription, AI processing, and AI trend analysis.
 - Use responsive forms, loading states, status feedback, error boundaries, and reusable UI components.
 
 ### (ii). Text-to-speech
 - Includes a [Sherpa-ONNX](https://k2-fsa.github.io/sherpa/onnx/tts/all/) WebAssembly-based TTS engine and related voice, segmentation, PCM playback, and WAV conversion utilities.
-- Provides listen/narration controls and a narration modal.
+- Provides listen/narration controls and a narration modal; everything is `offline`!
 - TTS runs through the local application assets rather than requiring every narration request to be sent to Cohere.
 
 ### (iii). Accounts and recovery
@@ -40,11 +40,11 @@ Diary AI is a full-stack TypeScript application built with Next.js, React, Postg
 - Account profile editing and password changes.
 - JWT session validation with a database-backed `sessionVersion` check to support invalidating older sessions when the version changes.
 - Multi-step account recovery routes for Google verification, backup verification, email OTP verification, and password reset.
-- OTP attempt and send-count fields, expiry timestamps, and recovery-session expiry data in the database schema.
-- Separate portable-account-restore sessions for restoring an account/diary onto another installation.
+- `OTP` attempt and send-count fields, expiry timestamps, and recovery-session expiry data in the database schema.
+- Separate `portable-account-restore` sessions for restoring an account/diary onto another installation.
 
 ### (iv). Backup and Google Drive
-- Backup export and encrypted-export routes.
+- Backup export and `encrypted-export` routes.
 - Backup verification routes.
 - Google Drive connection and disconnection flows.
 - Google Drive backup listing/restore, restore planning, and verification endpoints.
@@ -313,7 +313,7 @@ In the current `electron/main.ts`, the desktop HTTP port defaults to `3210`, whi
 Some directories contain additional files beyond those illustrated above. Generated Prisma client output is written to `generated/prisma/` and is excluded by the repository's `.gitignore`; it is regenerated during setup/build.
 
 ## PREREQUISITES
-## Configure Diary-AI
+## Install Diary-AI
 ### 1. Create `.env`
 - Diary AI application loads `.env` from its Electron user-data directory. The current `electron/main.ts` uses port `3210` by default, starts its own embedded PostgreSQL instance, and generates/persists these runtime secrets in `desktop-runtime.json` when that file does not already exist
 - For this Windows install, the desktop `.env` is typically located at:
@@ -451,38 +451,6 @@ SMTP_APP_PASSWORD="YOUR_GOOGLE_APP_PASSWORD"
 SMTP_FROM_NAME="Diary AI"
 ```
 
-- Your final `.env` file should look something like this:
-```dotenv
-# The desktop main process generates DATABASE_URL dynamically.
-# Do not set the web-development DATABASE_URL here.
-
-AUTH_SECRET=""
-AUTH_TRUST_HOST=true
-
-COHERE_API_KEY="cH8vN2qR7mK4xP9wT6jF3bL5sD1aY0uE"
-
-GOOGLE_CLIENT_ID="108765432109-abc123def456ghi789jkl012mno345pq.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="GOCSPX-aB7cD9eF2gH4jK6mN8pQ1rS3"
-
-GOOGLE_RESTORE_REDIRECT_URI="http://localhost:3210/api/restore/google/callback"
-GOOGLE_DRIVE_REDIRECT_URI="http://localhost:3210/api/google-drive/callback"
-GOOGLE_RECOVERY_REDIRECT_URI="http://localhost:3210/api/auth/recovery/google/callback"
-
-GOOGLE_TOKEN_ENCRYPTION_KEY="MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
-GOOGLE_RESTORE_TOKEN_ENCRYPTION_KEY=""
-
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT=465
-SMTP_USER="diary.ai.test@gmail.com"
-SMTP_APP_PASSWORD="qwer tyui opas dfgh"
-SMTP_FROM_NAME="Diary AI"
-
-RECOVERY_OTP_SECRET=""
-```
-
-
-> [!WARNING]
-> The values in `.env` directly above are dummy values, not actual working credentials.
 
 ### 7. Install Diary-AI-Setup-0.1.0-x64.exe
 - Ensure you have enough space before downloading the official setup file as it's considerably large ~`730mb`.
@@ -498,6 +466,7 @@ RECOVERY_OTP_SECRET=""
 >  - Back up the whole user-data directory before destructive maintenance.
 >   - Keep runtime configuration and database data together; the database password and encryption keys must remain consistent.
 
+- Open `Diary AI` and create a new account. Everything works completely offline except for: `Google Drive Backup & Restore`, `Cohere voice transcription`, `Trend Analysis`, and `Diary Cleaning`.
 - The installer is configured not to remove user data on uninstall. This is intentional to avoid accidental data loss.
 
 ## Local Development Setup
@@ -786,42 +755,6 @@ Port `465` normally uses implicit TLS; use the mode expected by `lib/email/smtp-
 
 Use a dedicated sender account where possible. For production, also consider delivery monitoring, rate limiting, abuse prevention, and a transactional email provider.
 
-Now your final `.env` should look something like this:
-```dotenv
-# Local PostgreSQL for web development
-DATABASE_URL="postgresql://postgres:Kifaru%402026%23Db@localhost:5432/diary_ai"
-
-# Auth.js
-AUTH_SECRET="v3JmQ8xLp2Nw7Kz5R4hY9cTa6Fud1BsE0GgXo3iVn8pWq2rL"
-AUTH_TRUST_HOST=true
-
-# Cohere AI
-COHERE_API_KEY="cH8vN2qR7mK4xP9wT6jF3bL5sD1aY0uE"
-
-# Google OAuth / Drive
-GOOGLE_CLIENT_ID="108765432109-abc123def456ghi789jkl012mno345pq.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="GOCSPX-aB7cD9eF2gH4jK6mN8pQ1rS3"
-GOOGLE_DRIVE_REDIRECT_URI="http://localhost:3000/api/google-drive/callback"
-GOOGLE_RECOVERY_REDIRECT_URI="http://localhost:3000/api/auth/recovery/google/callback"
-GOOGLE_RESTORE_REDIRECT_URI="http://localhost:3000/api/restore/google/callback"
-
-# Google token encryption
-GOOGLE_TOKEN_ENCRYPTION_KEY="MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
-GOOGLE_RESTORE_TOKEN_ENCRYPTION_KEY="N7pQ4xL9vR2mK8wT5yH3cF6jD1sA0uE7bG4zX9nM2kP5rW8"
-
-# SMTP / Gmail
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT=465
-SMTP_USER="diary.ai.test@gmail.com"
-SMTP_APP_PASSWORD="qwer tyui opas dfgh"
-SMTP_FROM_NAME="Diary AI"
-
-# Recovery OTP secret
-RECOVERY_OTP_SECRET="R8kW2mN5vX9pL3qT7yH4cD6jF1sA0uE8bG5zK9rM2wP7nQ"
-```
-
-> [!WARNING]
-> The Environment variables directly above are just dummy values. Do not paste them into your `.env` file.
 
 
 > [!CAUTION]
@@ -970,8 +903,8 @@ These features are planned and are **not represented as completed** by this READ
 - Clear documentation for AI data processing, backup recovery, local data ownership, and account deletion.
 
 ## License
-This project is licensed under the GNU License. View License [here](https://github.com/Lewismwaz/Diary-AI/blob/main/LICENSE).  
-More details about the MIT License can be found [here.](https://choosealicense.com/licenses/mit/)
+This project is licensed under the GPL License. View License [here](https://github.com/Lewismwaz/Diary-AI/blob/main/LICENSE).  
+More details about the License can be found [here.]([https://choosealicense.com/licenses/mit/](https://choosealicense.com/licenses/gpl-3.0/))
 
 ## Contact
 For any inquiries, please contact:
