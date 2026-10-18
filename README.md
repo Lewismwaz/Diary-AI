@@ -904,7 +904,7 @@ These features are planned and are **not represented as completed** by this READ
 
 ## License
 This project is licensed under the GPL License. View License [here](https://github.com/Lewismwaz/Diary-AI/blob/main/LICENSE).  
-More details about the License can be found [here.]([https://choosealicense.com/licenses/mit/](https://choosealicense.com/licenses/gpl-3.0/))
+More details about the License can be found [here.](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## Contact
 For any inquiries, please contact:
